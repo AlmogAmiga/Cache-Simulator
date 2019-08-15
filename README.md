@@ -3,7 +3,7 @@ A program to simulate cache written in C++
 
 Installation:
 Download all the files that are located in the directory Cache Simulator.
-If you don't run the project through Visual Studio you won't need the .sln file just the headrs and source files.
+If you don't run the project through Visual Studio you won't need the .sln file just the headers and source files.
 
 Run:
 After you've built the project successfully you need to specify: index, block offset, size of cache and most importantly the txt file from which you want to read the addresses.
