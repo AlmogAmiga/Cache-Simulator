@@ -50,24 +50,57 @@ int main()
 
 	if (input->good()) 
 	{ // Checking if the file has opened successfully
-		Block bl = Block(offset);
-		input->open(nameOfFile, ios::in); // Opening the file in input mode
-		cout << "Accesses to the cache:" << endl;
 
-		while ((!(input->eof())) && (nameOfFile != "") ) // While the file is not over
+		try 
 		{
-			
-			getline(*input, nameOfFile);
-			cout << "0x" << nameOfFile;
-			cout << " [" << bl.check(nameOfFile, tag) << "]" << endl;
-			cout << bl.toString() << endl << endl;
+			Cache cache = Cache(index, offset, tag, sizeOfCache);
+			cout << "Cache level of associativity: " << cache.getAssoLvl() << endl << endl;
+			string res = "";
+			input->open(nameOfFile, ios::in); // Opening the file in input mode
+			cout << "Accesses to the cache:" << endl;
+
+			while ((!(input->eof())) && (nameOfFile != "")) // While the file is not over
+			{
+				getline(*input, nameOfFile);
+				res = cache.load(nameOfFile);
+				cout << "0x" << nameOfFile;
+				cout << " [" << res << "]" << endl;
+
+				accesses++;
+
+				if (res == "Hit")
+				{
+					hits++;
+				}
+			}
+
+			cout << "\nSummary:\nTotal number of accesses: " << accesses << endl;
+			cout << "Hit Rate: " << ((hits + 0.0) / accesses) * 100 << "%" << endl;
+			cout << "Size of the cache: " << sizeOfCache << " Bytes" << endl;
+
+			system("pause");
+			input->close(); // Closing the file
+			delete input;
+			system("cls");
+			cout << "Cache Status:" << endl << endl;
+
+			cache.showCacheStatus();
+
+			cout << "\n\nHit Rate: " << ((hits + 0.0) / accesses) * 100 << "%" << endl;
+
+
+			system("pause");
+			return 0;
+
 		}
 
-
-		system("pause");
-		input->close(); // Closing the file
-		delete input;
-		return 0;
+		
+		catch (exception* e) // Incase that something went wrong while creating cache object
+		{
+			cout << (e->what()) << endl;
+			delete e;
+			return 1;
+		}
 
 	}
 

@@ -111,8 +111,8 @@ string Block::toString()
 		str.append("0");;
 	}
 
-	str = str + ", Tag: " + tag;
-	str = str + ", Data: { ";
+	str = str + "; Tag: " + tag;
+	str = str + "; Data: { ";
 
 	for (int i = 0; i < (int)(pow(2, offset)); i++) // Adding the data segment; i++ 
 	{
