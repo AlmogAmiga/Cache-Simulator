@@ -20,27 +20,8 @@ Block::~Block()
 
 void Block::occupy(string address, string _tag)
 {
-	unsigned int IAddress = 0; // Integer value of the address
-	tag = _tag; // Updating the tag
-	int size = (int)(pow(2, offset)); // Size of the data segment
-	stringstream ss; // In order to convert between bases 
-
-	ss << hex << address; // Saving the address in the string stream object
-	ss >> hex >> IAddress; // Parsing to decimal and saving in an intger
-
-	// Getting the first address
-	IAddress = IAddress >> offset;
-	IAddress = IAddress << offset;
-
-	for (int i = 0; i < size; i++) // Occupying the data segment in the block
-	{
-		//address = IAddress + "";
-		ss.str(""); // Reseting the stringstream object buffer
-		ss.clear();
-		ss << hex << IAddress; // Updating current address
-		data[i] = ss.str(); // Putting data at current index
-		IAddress++; // Getting next address
-	}
+	setTag(_tag); // Updating the tag
+	setData(address); // Updating the data stored in the block
 }
 
 string Block::check(string address, int sizeOfTag) // Checking if the address is on the block
@@ -49,21 +30,21 @@ string Block::check(string address, int sizeOfTag) // Checking if the address is
 
 	if (!valid)
 	{
-		valid = true;
-		occupy(address, getTag(address, sizeOfTag)); //Occupying the block
-		return "Miss Compulsory-valid";
+		valid = true; // Making the block valid
+		occupy(address, createTag(address, sizeOfTag)); //Occupying the block
+		return "Miss Compulsory-valid"; // Returning the result of the check
 		
 	}
 
 
 	else 
 	{
-		string tag = getTag(address, sizeOfTag);
+		string tag = createTag(address, sizeOfTag);
 
 		if (this->tag == tag) // If the block is valid and has the same tag it's a hit
 		{
 
-			return "Hit";
+			return "Hit"; // Returning the result of the check
 
 		}
 
@@ -71,13 +52,13 @@ string Block::check(string address, int sizeOfTag) // Checking if the address is
 		else // If block is valid but tags are not the same there's a miss tag
 		{
 			occupy(address, tag); //Occupying the block
-			return "Miss Tag";
+			return "Miss Tag"; // Returning the result of the check
 		}
 	}
 
 }
 
-string Block::getTag(string address, int sizeOfTag)
+string Block::createTag(string address, int sizeOfTag)
 {
 	string tag = "";
 	
@@ -147,4 +128,70 @@ string Block::toString()
 	str = str + " }";
 
 	return str;
+}
+
+
+
+string* Block::getData()
+{
+
+	int size = (int)(pow(2, offset + 2));
+	string* _data = new string[size]; // Creating a copy of the data
+	
+	for (int i = 0; i < size; i++)
+	{
+
+		_data[i] = this->data[i];
+
+	}
+
+	return _data;
+
+}
+
+string Block::getTag()
+{
+
+	return this->tag;
+}
+
+bool Block::isValid()
+{
+
+	return this->valid;
+
+}
+
+void Block::setTag(string tag)
+{
+
+	this->tag = tag;
+
+}
+
+
+void Block::setData(string address)
+{
+
+	unsigned int IAddress = 0; // Integer value of the address
+	int size = (int)(pow(2, offset)); // Size of the data segment
+	stringstream ss; // In order to convert between bases 
+
+	ss << hex << address; // Saving the address in the string stream object
+	ss >> hex >> IAddress; // Parsing to decimal and saving in an intger
+
+	// Getting the first address
+	IAddress = IAddress >> offset;
+	IAddress = IAddress << offset;
+
+	for (int i = 0; i < size; i++) // Occupying the data segment in the block
+	{
+		//address = IAddress + "";
+		ss.str(""); // Reseting the stringstream object buffer
+		ss.clear();
+		ss << hex << IAddress; // Updating current address
+		data[i] = ss.str(); // Putting data at current index
+		IAddress++; // Getting next address
+	}
+
 }

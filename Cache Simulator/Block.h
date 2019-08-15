@@ -12,9 +12,13 @@ private:
 	string* data; // Data of the block
 	int offset; // Size of offset
 
-	string getTag(string address, int sizeOfTag);
+	string createTag(string address, int sizeOfTag);
 
 	string hexToBin(char hexDigit);
+
+	void setTag(string tag);
+
+	void setData(string address);
 
 public:
 
@@ -28,4 +32,9 @@ public:
 
 	string toString();
 
+	string* getData();
+
+	string getTag();
+
+	bool isValid();
 };
